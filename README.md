@@ -1,3 +1,6 @@
+## release candidate 1.2 ##
+This version of jacktrip is being tested independently of the main jactrip project. It includes a compile time switch for WAIR (wide area internet reverberation). If off, jacktrip will behave normally (with updates over v.1.1). If on, then it will run 16ch-wide freeverb between a hub server and each of its clients.
+
 # JackTrip (download the latest release [here](https://github.com/jcacerec/jacktrip/releases))
 
 **JackTrip** is a Linux and Mac OS X-based system used for multi-machine audio network performance over the Internet. It supports any number of channels (as many as the computer/network can handle) of bidirectional, high quality, uncompressed audio signal streaming.
