@@ -15,8 +15,8 @@ CONFIG(debug, debug|release) {
 QT -= gui
 QT += network
 
-# switch from rc 1.2 to experimental wair build
-DEFINES += WAIR
+# rc.1.2 switch enables experimental wair build
+# DEFINES += WAIR
 
 # http://wiki.qtcentre.org/index.php?title=Undocumented_qmake#Custom_tools
 #cc DEFINES += __RT_AUDIO__
