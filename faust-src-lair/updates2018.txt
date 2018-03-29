@@ -1,0 +1,12 @@
+ap8x2.dsp implements freeverb, direct but no combs
+it mixes its stereo inputs to mono before AP chain
+
+new version, hand edited, keeps stereo channels separate
+compiled with faust online compiler
+just copied the compute routine directly into
+ap8x2.dsp.h
+(and changed new "inputs" & "outputs" to old "input" & "output")
+
+kept old versions with ...mixInToMono
+
+
