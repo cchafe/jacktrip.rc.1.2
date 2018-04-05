@@ -64,6 +64,13 @@ const int gMAX_WAIRS = 10; // jmess revision needed for string parse if > 1 digi
   const int gDefaultCombFilterFeedback = 0;
 #endif // endwhere
 
+#ifdef LOGGER // hubLogger
+// uses hub mode
+  const QString gLogfileRootName = QString("/tmp/jtiplog");
+  const QString gLogfileExtension = QString(".dat");
+  const int gLogfileSequence = 0;
+#endif // end hubLogger
+
 //const JackAudioInterface::audioBitResolutionT gDefaultBitResolutionMode =
 //    JackAudioInterface::BIT16;
 const AudioInterface::audioBitResolutionT gDefaultBitResolutionMode =

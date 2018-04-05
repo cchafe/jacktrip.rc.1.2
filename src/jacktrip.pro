@@ -17,6 +17,8 @@ QT += network
 
 # rc.1.2 switch enables experimental wair build
 # DEFINES += WAIR
+# rc.1.2 hubLogger branch, switch enables experimental logger build
+DEFINES += LOGGER
 
 # http://wiki.qtcentre.org/index.php?title=Undocumented_qmake#Custom_tools
 #cc DEFINES += __RT_AUDIO__
