@@ -7,3 +7,20 @@ at the top of the file record
 -- IP address
 -- buffer size
 -- sample rate
+
+/////////////////////////////
+open project in qt creator
+switch off shadow build
+
+don't do 
+clean in qt creator or make clean
+build in qt creator
+because of error with subdirectories
+
+do
+clean in qt creator or make clean
+./build
+build in qt creator
+
+clean in qt creator or make clean
+git add -A
