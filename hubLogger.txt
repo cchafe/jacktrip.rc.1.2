@@ -1,0 +1,9 @@
+hubLogger branch
+
+hub server mode will run a logging operation which measures inter-packet timings and logs them to a file
+file name root is specified on the command line
+each connection writes to a new file whose file name is in a series counting from 0 appended to the root name
+at the top of the file record
+-- IP address
+-- buffer size
+-- sample rate
