@@ -139,6 +139,9 @@ public :
     void setWAIR(int b) {mWAIR = b;}
     bool isWAIR() {return mWAIR;}
 #endif // endwhere
+#ifdef LOGGER // hubLogger
+    int mLOGn;
+#endif // end hubLogger
 
 };
 

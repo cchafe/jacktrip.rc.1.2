@@ -60,6 +60,9 @@ UdpMasterListener::UdpMasterListener(int server_port) :
     #ifdef WAIR // wair
     mWAIR(false),
     #endif // endwhere
+    #ifdef LOGGER // hubLogger
+    mLOGn(gLogfileSequence),
+    #endif // end hubLogger
     mTotalRunningThreads(0)
 {
     // Register JackTripWorker with the master listener
@@ -197,6 +200,12 @@ void UdpMasterListener::run()
                 mJTWorkers->at(id)->setJackTrip(id, mActiveAddress[id][0],
                         server_udp_port, mActiveAddress[id][1],
                         1); /// \todo temp default to 1 channel
+#ifdef LOGGER // hubLogger
+                // uses hub mode
+                QString tmp = QString::number(mLOGn);
+                qDebug() << "logfile:" << (gLogfileRootName+tmp+gLogfileExtension);
+#endif // end hubLogger
+
             }
             //send one thread to the pool
             cout << "JackTrip HUB SERVER: Starting JackTripWorker..." << endl;
