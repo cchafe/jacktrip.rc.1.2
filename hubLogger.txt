@@ -8,6 +8,9 @@ at the top of the file record
 -- buffer size
 -- sample rate
 
+regular jacktrip can find server by name
+hub mode needs IP address
+
 /////////////////////////////
 git clone https://github.com/cchafe/jacktrip.rc.1.2.git
 git checkout hubLogger 
@@ -29,5 +32,6 @@ clean in qt creator or make clean
 git add hubLogger.txt 
 
 or
+clean in qt creator or make clean
 rm Make*
 git add -A

@@ -1,31 +1,41 @@
 #include "hublogger.h"
 #include <QFile>
 
+#include "jacktrip_globals.h"
+#include "JackTrip.h"
+
 HubLogger::HubLogger(QString name) :
     mLogfileName(name)
 {
-    qDebug() << "logfile:" << mLogfileName;
+    //    qDebug() << "logfile:" << mLogfileName; // cout instead of qDebug() for ccrma hosts
+    std::cout << "logfile:" << mLogfileName.toStdString() << std::endl;
     init();
 }
+
 void HubLogger::init() {
-    //Write output file
+    //first, write output file
     QFile file(mLogfileName);
     //Check for existing file first, and confirm before overwriting
     if (file.exists()) {
-        qDebug() << "overwriting:" << mLogfileName;
+        //        qDebug() << "overwriting:" << mLogfileName;
+        std::cout << "overwriting:" << mLogfileName.toStdString() << std::endl;
     } else {
-        qDebug() << "creating:" << mLogfileName;
+        //        qDebug() << "creating:" << mLogfileName;
+        std::cout << "creating:" << mLogfileName.toStdString() << std::endl;
     }
 
     if (!file.open(QIODevice::WriteOnly)) {
-        qDebug()  << "Cannot open file for writing: "
-                  << qPrintable(file.errorString());
+        //        qDebug()  << "Cannot open file for writing: "
+        //                  << qPrintable(file.errorString());
+        std::cout << "Cannot open file for writing: "
+                  << QString(file.errorString()).toStdString() << std::endl;
     }
 
     QTextStream out(&file);
     out << mLogfileName;
     file.close();
-    qDebug() << mLogfileName << " written." << endl;
+    // qDebug() << mLogfileName << " written." << endl;
+    std::cout << mLogfileName.toStdString() << " written." << std::endl;
 }
 
 void HubLogger::recordInt(int i, bool newline)
@@ -36,12 +46,15 @@ void HubLogger::recordInt(int i, bool newline)
     if (file.exists()) {
         //        qDebug() << "appending:" << mLogfileName;
     } else {
-        qDebug() << "file missing:" << mLogfileName;
+        //        qDebug() << "file missing:" << mLogfileName;
+        std::cout << "file missing:" << mLogfileName.toStdString() << std::endl;
     }
 
     if (!file.open(QIODevice::Append)) {
-        qDebug()  << "Cannot open file for Appending: "
-                  << qPrintable(file.errorString());
+        //        qDebug()  << "Cannot open file for Appending: "
+        //                  << qPrintable(file.errorString());
+        std::cout << "Cannot open file for Appending: "
+                  << QString(file.errorString()).toStdString() << std::endl;
     }
 
     QTextStream out(&file);

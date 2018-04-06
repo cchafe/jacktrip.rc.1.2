@@ -77,6 +77,7 @@ UdpDataProtocol::UdpDataProtocol(JackTrip* jacktrip, const runModeT runmode,
     if (mRunMode == RECEIVER) {
         QObject::connect(this, SIGNAL(signalWaitingTooLong(int)),
                          jacktrip, SLOT(slotUdpWaitingTooLongClientGoneProbably(int)), Qt::QueuedConnection);
+        // jacktrip.h prints "UDP WAITED MORE THAN 30 seconds."
 
 #ifdef LOGGER // hubLogger
         QString tmp = gLogfileRootName+QString::number(jacktrip->getLOGn())+gLogfileExtension;
@@ -387,10 +388,14 @@ void UdpDataProtocol::run()
     switch ( mRunMode )
     {
     case RECEIVER : {
+#ifndef LOGGER // hubLogger
         // Connect signals and slots for packets arriving too late notifications
         QObject::connect(this, SIGNAL(signalWaitingTooLong(int)),
                          this, SLOT(printUdpWaitedTooLong30msec(int)),
                          Qt::QueuedConnection);
+        // prints "UDP waiting too long (more than " << wait_time << "ms)..."
+#endif // end hubLogger
+
         //-----------------------------------------------------------------------------------
         // Wait for the first packet to be ready and obtain address
         // from that packet
