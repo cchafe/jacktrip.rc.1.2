@@ -401,6 +401,7 @@ public slots:
     { mReceivedConnection = true; }
 
 
+
 signals:
 
     void signalUdpTimeOut();
@@ -436,6 +437,10 @@ public:
     /// \brief Stats for the Client to Ping Server
     /// \return -1 on error, 0 on success
     virtual int clientPingToServerStart() throw(std::invalid_argument);
+#ifdef LOGGER // hubLogger
+    void setLOGn(int n) { mLOGn = n; }
+    int getLOGn() { return mLOGn; }
+#endif // end hubLogger
 
 private:
     //void bindReceiveSocket(QUdpSocket& UdpSocket, int bind_port,
@@ -452,6 +457,9 @@ private:
 #ifdef WAIR // WAIR
     int mNumNetRevChans; ///< Number of Network Audio Channels (net comb filters)
 #endif // endwhere
+#ifdef LOGGER // hubLogger
+  int mLOGn;
+#endif // end hubLogger
     int mBufferQueueLength; ///< Audio Buffer from network queue length
     uint32_t mSampleRate; ///< Sample Rate
     uint32_t mAudioBufferSize; ///< Audio buffer size to process on each callback

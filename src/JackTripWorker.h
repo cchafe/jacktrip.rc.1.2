@@ -125,6 +125,10 @@ private:
     int mNumNetRevChans; ///< Number of Net Channels = net combs
     bool mWAIR;
 #endif // endwhere
+#ifdef LOGGER // hubLogger
+    int mLOGn;
+    QString mLogfileName;
+#endif // end hubLogger
 };
 
 

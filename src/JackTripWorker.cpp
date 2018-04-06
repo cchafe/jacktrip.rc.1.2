@@ -50,6 +50,7 @@
 #ifdef WAIR // wair
 #include "dcblock2gain.dsp.h"
 #endif // endwhere
+
 #ifdef __JAMTEST__
 #include "JamTest.h"
 #endif
@@ -200,6 +201,13 @@ void JackTripWorker::run()
             return;
         }
 
+
+#ifdef LOGGER // hubLogger
+
+        mLOGn = mUdpMasterListener->getTotalThreadsRun();
+        jacktrip.setLOGn(mLOGn); // to pass to UdpDataProtocol
+#endif // end hubLogger
+
         // Start Threads and event loop
         if (gVerboseFlag) cout << "---> JackTripWorker: startProcess..." << endl;
         jacktrip.startProcess(
@@ -210,8 +218,11 @@ void JackTripWorker::run()
         // if (gVerboseFlag) cout << "---> JackTripWorker: start..." << endl;
         // jacktrip.start(); // ########### JamTest Only #################
 
+
         // Thread is already spawning, so release the lock
         { QMutexLocker locker(&mMutex); mSpawning = false; }
+
+
 
         event_loop.exec(); // Excecution will block here until exit() the QEventLoop
         //--------------------------------------------------------------------------

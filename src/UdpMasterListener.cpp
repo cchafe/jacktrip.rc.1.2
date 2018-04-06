@@ -51,7 +51,6 @@
 
 using std::cout; using std::endl;
 
-
 //*******************************************************************************
 UdpMasterListener::UdpMasterListener(int server_port) :
     //mJTWorker(NULL),
@@ -61,7 +60,7 @@ UdpMasterListener::UdpMasterListener(int server_port) :
     mWAIR(false),
     #endif // endwhere
     #ifdef LOGGER // hubLogger
-    mLOGn(gLogfileSequence),
+        mTotalThreadsRun(-1), // first client is client 0
     #endif // end hubLogger
     mTotalRunningThreads(0)
 {
@@ -200,11 +199,6 @@ void UdpMasterListener::run()
                 mJTWorkers->at(id)->setJackTrip(id, mActiveAddress[id][0],
                         server_udp_port, mActiveAddress[id][1],
                         1); /// \todo temp default to 1 channel
-#ifdef LOGGER // hubLogger
-                // uses hub mode
-                QString tmp = QString::number(mLOGn);
-                qDebug() << "logfile:" << (gLogfileRootName+tmp+gLogfileExtension);
-#endif // end hubLogger
 
             }
             //send one thread to the pool
@@ -391,6 +385,7 @@ int UdpMasterListener::isNewAddress(uint32_t address, uint16_t port)
     }
     if (!busyAddress) {
         mTotalRunningThreads++;
+        mTotalThreadsRun++;
     }
     return ((busyAddress) ? -1 : id);
 }

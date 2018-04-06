@@ -140,7 +140,12 @@ public :
     bool isWAIR() {return mWAIR;}
 #endif // endwhere
 #ifdef LOGGER // hubLogger
-    int mLOGn;
+    int mTotalThreadsRun; ///< Number of Threads which have run in the pool
+
+public :
+    /** \brief Returns the total number of spawned clients
+    */
+    int getTotalThreadsRun() { return mTotalThreadsRun;}
 #endif // end hubLogger
 
 };

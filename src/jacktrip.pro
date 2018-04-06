@@ -127,7 +127,8 @@ HEADERS += DataProtocol.h \
             ../faust-src-lair/stk/Filter.h \
             ../faust-src-lair/stk/Stk.h \
             ../faust-src-lair/stk/OnePole.h \
-            JMess.h
+            JMess.h \
+    hublogger.h
 
 !nojack {
 HEADERS += JackAudioInterface.h
@@ -151,7 +152,8 @@ SOURCES += DataProtocol.cpp \
             ../faust-src-lair/stk/Delay.cpp \
             ../faust-src-lair/stk/Stk.cpp \
             ../faust-src-lair/stk/OnePole.cpp \
-            JMess.cpp
+            JMess.cpp \
+    hublogger.cpp
 
 !nojack {
 SOURCES += JackAudioInterface.cpp
