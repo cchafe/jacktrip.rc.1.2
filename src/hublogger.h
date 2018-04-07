@@ -13,10 +13,36 @@ public:
     void init();
 private:
     QString mLogfileName;
-    void recordInt(int i, bool newline);
+    void record(double d, bool newline, bool toInt);
 public slots:
-    void recordInterpacketInterval(int i) { recordInt(i, true); }
-    void recordSeqNum(int i) { recordInt(i, false); }
+    void recordInterpacketInterval(int i) { record(i, true, true); }
+    void recordInterpacketIntervalFloat(double d) { record(d, true, false); }
+    void recordSeqNum(int i) { record(i, false, true); }
+};
+
+// borrowing from https://github.com/rsmz/qnanotimer
+class QNanoTimer : public QObject
+{
+    Q_OBJECT
+public:
+
+    void start()
+    {
+        clock_gettime(CLOCK_REALTIME, & mStart);
+    }
+
+    int elapsedNanos()
+    {
+        struct timespec now;
+        clock_gettime(CLOCK_REALTIME, & now);
+        mElapsedNanos =
+                (now.tv_sec  - mStart.tv_sec) * 1e9 +
+                (now.tv_nsec - mStart.tv_nsec);
+        return mElapsedNanos;
+    }
+private:
+    struct timespec mStart;
+    int mElapsedNanos;
 };
 
 #endif // HUBLOGGER_H

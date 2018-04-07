@@ -85,6 +85,8 @@ UdpDataProtocol::UdpDataProtocol(JackTrip* jacktrip, const runModeT runmode,
         mLogger->start();
         QObject::connect(this, SIGNAL(interpacketInterval(int)),
                          mLogger, SLOT(recordInterpacketInterval(int)), Qt::QueuedConnection);
+        QObject::connect(this, SIGNAL(interpacketIntervalFloat(double)),
+                         mLogger, SLOT(recordInterpacketIntervalFloat(double)), Qt::QueuedConnection);
         QObject::connect(this, SIGNAL(seqNum(int)),
                          mLogger, SLOT(recordSeqNum(int)), Qt::QueuedConnection);
 #endif // end hubLogger
@@ -432,7 +434,9 @@ void UdpDataProtocol::run()
         uint16_t newer_seq_num = 0;   // Store newer sequence number
 
         if (gVerboseFlag) std::cout << "step 8" << std::endl;
-
+#ifdef LOGGER // hubLogger
+        sessionTimer.start();
+#endif // end hubLogger
         while ( !mStopped )
         {
             // Timer to report packets arriving too late
@@ -463,6 +467,11 @@ void UdpDataProtocol::run()
                                     last_seq_num,
                                     newer_seq_num);
         }
+        int tmp = sessionTimer.elapsed();
+#ifdef LOGGER // hubLogger
+        qDebug() << "session lasted" << (tmp/1000.0) - 2.0 << "secs";
+        // set to 2 secs in jackTrip.h slotUdpWaitingTooLongClientGoneProbably(int wait_msec)
+#endif // end hubLogger
         break; }
 
     case SENDER : {
@@ -496,6 +505,9 @@ void UdpDataProtocol::waitForReady(QUdpSocket& UdpSocket, int timeout_msec)
 {
     int loop_resolution_usec = 100; // usecs to wait on each loop
     int emit_resolution_usec = 10000; // 10 milliseconds
+#ifdef LOGGER // hubLogger
+    emit_resolution_usec = 100000; // 100 milliseconds
+#endif // end hubLogger
     int timeout_usec = timeout_msec * 1000;
     int elapsed_time_usec = 0; // Ellapsed time in milliseconds
 
@@ -568,12 +580,15 @@ void UdpDataProtocol::receivePacketRedundancy(QUdpSocket& UdpSocket,
     //cout << endl;
 
 #ifdef LOGGER // hubLogger
-    // toss the first 50 to stabilize
-    if(newer_seq_num == 50) { timer.start(); }
-    if(newer_seq_num > 50) {
-        emit interpacketInterval(timer.elapsed());
-        emit seqNum(newer_seq_num-last_seq_num);
+#define TOSSERS 50
+    // toss the first 50? to stabilize
+    if(newer_seq_num == TOSSERS) { timer.start(); nanoTimer.start(); }
+    if(newer_seq_num > TOSSERS) {
+//        emit interpacketInterval(timer.elapsed());
+        emit interpacketIntervalFloat(nanoTimer.elapsedNanos()*0.000001);
+//        emit seqNum(newer_seq_num-last_seq_num);
         timer.start();
+        nanoTimer.start();
     }
 #endif // end hubLogger
 

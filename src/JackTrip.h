@@ -390,6 +390,9 @@ public slots:
     void slotUdpWaitingTooLongClientGoneProbably(int wait_msec)
     {
         int wait_time = 30000; // msec
+#ifdef LOGGER // hubLogger
+        wait_time = 2000; // msec
+#endif // end hubLogger
         if ( !(wait_msec%wait_time) ) {
             std::cerr << "UDP WAITED MORE THAN 30 seconds." << std::endl;
             emit signalNoUdpPacketsForSeconds();

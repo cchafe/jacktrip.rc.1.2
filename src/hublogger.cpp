@@ -38,7 +38,7 @@ void HubLogger::init() {
     std::cout << mLogfileName.toStdString() << " written." << std::endl;
 }
 
-void HubLogger::recordInt(int i, bool newline)
+void HubLogger::record(double d, bool newline, bool toInt)
 {
     //    qDebug() << "rcv"<< ipi_msec;
     QFile file(mLogfileName);
@@ -58,7 +58,8 @@ void HubLogger::recordInt(int i, bool newline)
     }
 
     QTextStream out(&file);
-    out << ((newline)?"\n":"\t") << i;
+    if (toInt)  out << ((newline)?"\n":"\t") << (int)d;
+    else out << ((newline)?"\n":"\t") << d;
     file.close();
 }
 
