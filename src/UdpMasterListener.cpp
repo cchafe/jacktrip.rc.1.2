@@ -213,6 +213,10 @@ void UdpMasterListener::run()
 #ifdef WAIR // WAIR
             if (isWAIR()) connectMesh(true); // invoked with -Sw
 #endif // endwhere
+#ifdef LOGGER // hubLogger
+        qDebug() << "connectLoopback"; // each client hears themself
+        connectLoopbacks(true);
+#endif // end hubLogger
         }
     }
 
@@ -440,6 +444,17 @@ void UdpMasterListener::enumerateRunningThreadIDs()
     }
 }
 #endif // endwhere
+
+#ifdef LOGGER // hubLogger
+#include "JMess.h"
+//*******************************************************************************
+void UdpMasterListener::connectLoopbacks(bool spawn)
+{
+    cout << ((spawn)?"spawning":"releasing") << " jacktripWorker so change loopbacks" << endl;
+    JMess tmp;
+    tmp.connectSpawnedLoopbacks(gDefaultNumInChannels); // change gDefaultNumInChannels if more than stereo LAIR interconnects
+}
+#endif // end hubLogger
 
 // TODO:
 // USE bool QAbstractSocket::isValid () const to check if socket is connect. if not, exit loop

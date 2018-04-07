@@ -129,9 +129,10 @@ JackTrip::~JackTrip()
 
 //*******************************************************************************
 void JackTrip::setupAudio(
-        #ifdef WAIR // WAIR
+        #if defined(WAIR) || defined(LOGGER)
         int ID
         #endif // endwhere
+
         )
 {
     // Check if mAudioInterface has already been created or not
@@ -152,11 +153,13 @@ void JackTrip::setupAudio(
                                          #endif // endwhere
                                                  mAudioBitResolution);
 
-#ifdef WAIR // WAIR
+#if defined(WAIR) || defined(LOGGER)
         QByteArray tmp = QString(WAIR_AUDIO_NAME+QString::number(ID)).toLatin1();
         mJackClientName = tmp.constData();
         std::cout  << "WAIR ID " << ID << " jacktrip client name set to=" << mJackClientName << std::endl;
 #endif // endwhere
+
+
 
         mAudioInterface->setClientName(mJackClientName);
 
@@ -305,7 +308,7 @@ void JackTrip::appendProcessPlugin(ProcessPlugin* plugin)
 
 //*******************************************************************************
 void JackTrip::startProcess(
-        #ifdef WAIR // WAIR
+        #if defined(WAIR) || defined(LOGGER)
         int ID
         #endif // endwhere
         ) throw(std::invalid_argument)
@@ -334,7 +337,7 @@ void JackTrip::startProcess(
     // ------------------------------
     if (gVerboseFlag) std::cout << "  JackTrip:startProcess before setupAudio" << std::endl;
     setupAudio(
-            #ifdef WAIR // wair
+            #if defined(WAIR) || defined(LOGGER)
                 ID
             #endif // endwhere
                 );

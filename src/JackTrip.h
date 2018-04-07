@@ -152,7 +152,7 @@ public:
 
     /// \brief Start the processing threads
     virtual void startProcess(
-        #ifdef WAIR // wair
+        #if defined(WAIR) || defined(LOGGER)
             int ID
         #endif // endwhere
             ) throw(std::invalid_argument);
@@ -419,7 +419,7 @@ public:
 
     /// \brief Set the AudioInteface object
     virtual void setupAudio(
-        #ifdef WAIR // WAIR
+        #if defined(WAIR) || defined(LOGGER)
             int ID
         #endif // endwhere
             );

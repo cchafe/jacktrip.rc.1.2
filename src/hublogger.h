@@ -16,7 +16,7 @@ private:
     void record(double d, bool newline, bool toInt);
 public slots:
     void recordInterpacketInterval(int i) { record(i, true, true); }
-    void recordInterpacketIntervalFloat(double d) { record(d, true, false); }
+    void recordInterpacketIntervalDouble(double d) { record(d, true, false); }
     void recordSeqNum(int i) { record(i, false, true); }
 };
 

@@ -211,7 +211,7 @@ void JackTripWorker::run()
         // Start Threads and event loop
         if (gVerboseFlag) cout << "---> JackTripWorker: startProcess..." << endl;
         jacktrip.startProcess(
-            #ifdef WAIR // wair
+            #if defined(WAIR) || defined(LOGGER)
                     mID
             #endif // endwhere
                     );

@@ -141,7 +141,7 @@ public :
 #endif // endwhere
 #ifdef LOGGER // hubLogger
     int mTotalThreadsRun; ///< Number of Threads which have run in the pool
-
+    void connectLoopbacks(bool spawn);
 public :
     /** \brief Returns the total number of spawned clients
     */

@@ -226,6 +226,69 @@ void JMess::connectSpawnedPorts(int nChans)
     free(ports);
 }
 
+//*******************************************************************************
+void JMess::connectSpawnedLoopbacks(int nChans)
+// called from UdpMasterListener::connectMesh
+{
+    int LAIRS[gMAX_WAIRS];
+    int ctr = 0;
+    for (int i = 0; i<gMAX_WAIRS; i++) LAIRS[i] = -1;
+    QString bogus("badNumberField");
+
+    const char **ports, **connections; //vector of ports and connections
+    QVector<QString> OutputInput(2); //helper variable
+
+    qDebug() << "Get active output ports.";
+    //Get active output ports.
+    ports = jack_get_ports (mClient, NULL, NULL, JackPortIsOutput);
+
+    int numberField = QString(WAIR_AUDIO_NAME).size();
+    for (unsigned int out_i = 0; ports[out_i]; ++out_i) {
+        bool tmp = QString(ports[out_i]).contains(WAIR_AUDIO_NAME);
+        QChar c = QString(ports[out_i]).at(numberField);
+        QString s = (c.isDigit())?QString(c):bogus;
+        if((s!=bogus) && (s.toInt()<(gMAX_WAIRS-1)))
+        {
+            bool newOne = true;
+            for (int i = 0; i<ctr; i++) if (newOne && (LAIRS[i]==s.toInt())) newOne = false;
+            if (newOne)
+            {
+                LAIRS[ctr] = s.toInt();
+                ctr++;
+                                qDebug() << ports[out_i] << tmp << s;
+            }
+        }
+    }
+        for (int i = 0; i<gMAX_WAIRS; i++) qDebug() << i << LAIRS[i]; // list connected LAIR IDs
+    qDebug() << "disconnectAll";
+    disconnectAll();
+    for (int i = 0; i<ctr; i++)
+//        for (int j = 0; j<(ctr-1); j++)
+        {
+            int k = i; // (j+(i+1))%ctr;
+            for (int l = 1; l<=nChans; l++) // chans are 1-based
+            {
+                qDebug() << "connect LAIR" << LAIRS[i] << ":receive_ " << l
+                         <<"with LAIR" << LAIRS[k] << "send_" << l;
+
+                QString left = (QString(WAIR_AUDIO_NAME + QString::number(LAIRS[i]) +
+                         ":receive_" + QString::number(l)));
+                QString right = (QString(WAIR_AUDIO_NAME + QString::number(LAIRS[k]) +
+                         ":send_" + QString::number(l)));
+
+                if (0 !=
+                    jack_connect(mClient, left.toStdString().c_str(), right.toStdString().c_str())) {
+                  qDebug() << "WARNING: port: " << left
+                       << "and port: " << right
+                       << " could not be connected.";
+                }
+
+            }
+        }
+
+    free(ports);
+}
+
 
 
 

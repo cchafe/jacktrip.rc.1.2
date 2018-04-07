@@ -156,7 +156,7 @@ signals:
     /// \param ipi_msec time since last packet in milliseconds
 #ifdef LOGGER // hubLogger
     void interpacketInterval(int ipi_msec);
-    void interpacketIntervalFloat(double ipi_nsec);
+    void interpacketIntervalDouble(double ipi_nsec);
     void seqNum(int seq_num);
 #endif // end hubLogger
 

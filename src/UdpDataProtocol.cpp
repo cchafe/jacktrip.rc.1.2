@@ -85,8 +85,8 @@ UdpDataProtocol::UdpDataProtocol(JackTrip* jacktrip, const runModeT runmode,
         mLogger->start();
         QObject::connect(this, SIGNAL(interpacketInterval(int)),
                          mLogger, SLOT(recordInterpacketInterval(int)), Qt::QueuedConnection);
-        QObject::connect(this, SIGNAL(interpacketIntervalFloat(double)),
-                         mLogger, SLOT(recordInterpacketIntervalFloat(double)), Qt::QueuedConnection);
+        QObject::connect(this, SIGNAL(interpacketIntervalDouble(double)),
+                         mLogger, SLOT(recordInterpacketIntervalDouble(double)), Qt::QueuedConnection);
         QObject::connect(this, SIGNAL(seqNum(int)),
                          mLogger, SLOT(recordSeqNum(int)), Qt::QueuedConnection);
 #endif // end hubLogger
@@ -585,7 +585,7 @@ void UdpDataProtocol::receivePacketRedundancy(QUdpSocket& UdpSocket,
     if(newer_seq_num == TOSSERS) { timer.start(); nanoTimer.start(); }
     if(newer_seq_num > TOSSERS) {
 //        emit interpacketInterval(timer.elapsed());
-        emit interpacketIntervalFloat(nanoTimer.elapsedNanos()*0.000001);
+        emit interpacketIntervalDouble(nanoTimer.elapsedNanos()*0.000001);
 //        emit seqNum(newer_seq_num-last_seq_num);
         timer.start();
         nanoTimer.start();

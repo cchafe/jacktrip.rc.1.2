@@ -72,6 +72,7 @@ public:
   void setConnectedPorts();
   /// \brief Cross connect ports between net combs, -l LAIR mode
   void connectSpawnedPorts(int nChans);
+  void connectSpawnedLoopbacks(int nChans);
 
 private:
   int parseXML(QString xmlInFile);
