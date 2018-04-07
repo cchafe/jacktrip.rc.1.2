@@ -10,13 +10,14 @@ class HubLogger : public QThread
     Q_OBJECT;
 public:
     HubLogger(QString name);
-    void init();
+    void init(QString clientInfo);
 private:
     QString mLogfileName;
     void record(double d, bool newline, bool toInt);
 public slots:
     void recordInterpacketInterval(int i) { record(i, true, true); }
-    void recordInterpacketIntervalDouble(double d) { record(d, true, false); }
+    void recordInterpacketIntervalDouble(double d) { record(d, false, false); }
+    void recordSecondsDouble(double d) { record(d, true, false); }
     void recordSeqNum(int i) { record(i, false, true); }
 };
 

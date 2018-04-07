@@ -314,6 +314,8 @@ public:
     { return mAudioInterface->getSampleRateType(); }
     int getSampleRate() const
     { return mSampleRate; /*return mAudioInterface->getSampleRate();*/ }
+    int getBufferQueueLength() const
+    { return mBufferQueueLength;  }
 
     uint8_t getAudioBitResolution() const
     { return mAudioBitResolution*8; /*return mAudioInterface->getAudioBitResolution();*/ }

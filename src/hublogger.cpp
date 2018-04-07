@@ -9,10 +9,9 @@ HubLogger::HubLogger(QString name) :
 {
     //    qDebug() << "logfile:" << mLogfileName; // cout instead of qDebug() for ccrma hosts
     std::cout << "logfile:" << mLogfileName.toStdString() << std::endl;
-    init();
 }
 
-void HubLogger::init() {
+void HubLogger::init(QString clientInfo) {
     //first, write output file
     QFile file(mLogfileName);
     //Check for existing file first, and confirm before overwriting
@@ -32,7 +31,7 @@ void HubLogger::init() {
     }
 
     QTextStream out(&file);
-    out << mLogfileName;
+    out << clientInfo;
     file.close();
     // qDebug() << mLogfileName << " written." << endl;
     std::cout << mLogfileName.toStdString() << " written." << std::endl;

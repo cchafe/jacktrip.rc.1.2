@@ -157,6 +157,7 @@ signals:
 #ifdef LOGGER // hubLogger
     void interpacketInterval(int ipi_msec);
     void interpacketIntervalDouble(double ipi_nsec);
+    void secondsDouble(double secs);
     void seqNum(int seq_num);
 #endif // end hubLogger
 
@@ -215,7 +216,6 @@ private:
     static QMutex sUdpMutex; ///< Mutex to make thread safe the binding process
 #ifdef LOGGER // hubLogger
     HubLogger* mLogger;
-    QElapsedTimer timer;
     QElapsedTimer sessionTimer;
     QNanoTimer nanoTimer;
 #endif // end hubLogger

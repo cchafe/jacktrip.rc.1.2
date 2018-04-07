@@ -83,10 +83,13 @@ UdpDataProtocol::UdpDataProtocol(JackTrip* jacktrip, const runModeT runmode,
         QString tmp = gLogfileRootName+QString::number(jacktrip->getLOGn())+gLogfileExtension;
         mLogger = new HubLogger(tmp);
         mLogger->start();
+        mLogger->init(jacktrip->getPeerAddress());
         QObject::connect(this, SIGNAL(interpacketInterval(int)),
                          mLogger, SLOT(recordInterpacketInterval(int)), Qt::QueuedConnection);
         QObject::connect(this, SIGNAL(interpacketIntervalDouble(double)),
                          mLogger, SLOT(recordInterpacketIntervalDouble(double)), Qt::QueuedConnection);
+        QObject::connect(this, SIGNAL(secondsDouble(double)),
+                         mLogger, SLOT(recordSecondsDouble(double)), Qt::QueuedConnection);
         QObject::connect(this, SIGNAL(seqNum(int)),
                          mLogger, SLOT(recordSeqNum(int)), Qt::QueuedConnection);
 #endif // end hubLogger
@@ -580,14 +583,22 @@ void UdpDataProtocol::receivePacketRedundancy(QUdpSocket& UdpSocket,
     //cout << endl;
 
 #ifdef LOGGER // hubLogger
-#define TOSSERS 50
-    // toss the first 50? to stabilize
-    if(newer_seq_num == TOSSERS) { timer.start(); nanoTimer.start(); }
+#define TOSSERS 100
+    // toss the first 100 to stabilize
+    if(newer_seq_num == TOSSERS) { nanoTimer.start(); }
     if(newer_seq_num > TOSSERS) {
-//        emit interpacketInterval(timer.elapsed());
-        emit interpacketIntervalDouble(nanoTimer.elapsedNanos()*0.000001);
-//        emit seqNum(newer_seq_num-last_seq_num);
-        timer.start();
+        //        emit interpacketIntervalDouble(nanoTimer.elapsedNanos()*0.000001);
+        double elapsed = nanoTimer.elapsedNanos()*0.000001;
+        double period = (double)mJackTrip->getBufferSizeInSamples() / (double)mJackTrip->getSampleRate();
+        double thresh = 1000.0 * period * mJackTrip->getBufferQueueLength();
+        if (elapsed > thresh) {
+            double now = newer_seq_num * period;
+//            qDebug() << now << elapsed << thresh;
+            emit secondsDouble(now);
+            emit interpacketIntervalDouble(elapsed);
+            //            emit seqNum(newer_seq_num);
+            //            emit seqNum( newer_seq_num - last_seq_num );
+        }
         nanoTimer.start();
     }
 #endif // end hubLogger
