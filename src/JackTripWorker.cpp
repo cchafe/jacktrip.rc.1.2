@@ -67,6 +67,9 @@ JackTripWorker::JackTripWorker(UdpMasterListener* udpmasterlistener) :
   ,mNumNetRevChans(0),
     mWAIR(false)
   #endif // endwhere
+  #ifdef LOGGER // hubLogger
+     ,mLOGGER(false)
+  #endif // end hubLogger
 {
     setAutoDelete(false); // stick around after calling run()
     //mNetks = new NetKS;
@@ -203,9 +206,11 @@ void JackTripWorker::run()
 
 
 #ifdef LOGGER // hubLogger
-
-        mLOGn = mUdpMasterListener->getTotalThreadsRun();
-        jacktrip.setLOGn(mLOGn); // to pass to UdpDataProtocol
+        if (mUdpMasterListener->isLOGGER()) { // invoked with -Sd
+            mLOGGER = true;
+            mLOGn = mUdpMasterListener->getTotalThreadsRun();
+            jacktrip.setLOGn(mLOGn); // to pass to UdpDataProtocol
+        }
 #endif // end hubLogger
 
         // Start Threads and event loop

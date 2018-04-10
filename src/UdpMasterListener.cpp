@@ -60,7 +60,8 @@ UdpMasterListener::UdpMasterListener(int server_port) :
     mWAIR(false),
     #endif // endwhere
     #ifdef LOGGER // hubLogger
-        mTotalThreadsRun(-1), // first client is client 0
+    mLOGGER(false),
+    mTotalThreadsRun(-1), // first client is client 0
     #endif // end hubLogger
     mTotalRunningThreads(0)
 {
@@ -214,8 +215,8 @@ void UdpMasterListener::run()
             if (isWAIR()) connectMesh(true); // invoked with -Sw
 #endif // endwhere
 #ifdef LOGGER // hubLogger
-        qDebug() << "connectLoopback"; // each client hears themself
-        connectLoopbacks(true);
+            qDebug() << "connectLoopback"; // each client hears themself
+            connectLoopbacks(true);
 #endif // end hubLogger
         }
     }

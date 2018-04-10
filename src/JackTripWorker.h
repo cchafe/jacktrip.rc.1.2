@@ -128,6 +128,7 @@ private:
 #ifdef LOGGER // hubLogger
     int mLOGn;
     QString mLogfileName;
+    bool mLOGGER;
 #endif // end hubLogger
 };
 

@@ -140,12 +140,15 @@ public :
     bool isWAIR() {return mWAIR;}
 #endif // endwhere
 #ifdef LOGGER // hubLogger
+    bool mLOGGER; ///< LOGGER mode
     int mTotalThreadsRun; ///< Number of Threads which have run in the pool
     void connectLoopbacks(bool spawn);
 public :
     /** \brief Returns the total number of spawned clients
     */
     int getTotalThreadsRun() { return mTotalThreadsRun;}
+    void setLOGGER(int b) {mLOGGER = b;}
+    bool isLOGGER() {return mLOGGER;}
 #endif // end hubLogger
 
 };

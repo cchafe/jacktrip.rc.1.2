@@ -75,6 +75,9 @@ Settings::Settings() :
     mNumNetRevChans(0),
     mWAIR(false),
     #endif // endwhere
+    #ifdef LOGGER // hubLogger
+    mLOGGER(false),
+    #endif // end hubLogger
     mJamLink(false),
     mEmptyHeader(false),
     mJackTripServer(false),
@@ -167,6 +170,12 @@ void Settings::parseInput(int argc, char** argv)
             mClientRoomSize = atof(optarg); // cmd line comb feedback adjustment
             break;
 #endif // endwhere
+#ifdef LOGGER // hubLogger
+        case 'd':
+            //-------------------------------------------------------
+            mLOGGER = true; // gather QoS data with hubLogger
+            break;
+#endif // end hubLogger
         case 's': // Run in server mode
             //-------------------------------------------------------
             mJackTripMode = JackTrip::SERVER;
@@ -384,6 +393,9 @@ void Settings::startJackTrip()
 #ifdef WAIR // WAIR
         udpmaster->setWAIR(mWAIR);
 #endif // endwhere
+#ifdef LOGGER // hubLogger
+        udpmaster->setLOGGER(mLOGGER);
+#endif // end hubLogger
         if (gVerboseFlag) std::cout << "Settings:startJackTrip before udpmaster->start" << std::endl;
         udpmaster->start();
 
@@ -523,6 +535,13 @@ void Settings::startJackTrip()
             }
         }
 #endif // endwhere
+
+#ifdef LOGGER // hubLogger
+        if ( mLOGGER ) {
+            cout << "Running in LOGGER Mode..." << endl;
+            cout << gPrintSeparator << std::endl;
+        }
+#endif // end hubLogger
 
         // Start JackTrip
         if (gVerboseFlag) std::cout << "Settings:startJackTrip before mJackTrip->startProcess" << std::endl;

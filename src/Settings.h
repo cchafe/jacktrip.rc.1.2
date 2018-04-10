@@ -98,6 +98,10 @@ private:
     bool mWAIR; ///< WAIR mode
 #endif // endwhere
 
+#ifdef LOGGER // hubLogger
+    bool mLOGGER; ///< LOGGER mode
+#endif // end hubLogger
+
     bool mLoopBack; ///< Loop-back mode
     bool mJamLink; ///< JamLink mode
     bool mEmptyHeader; ///< EmptyHeader mode
