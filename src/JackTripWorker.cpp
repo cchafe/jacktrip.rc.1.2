@@ -208,7 +208,10 @@ void JackTripWorker::run()
 #ifdef LOGGER // hubLogger
         if (mUdpMasterListener->isLOGGER()) { // invoked with -Sd
             mLOGGER = true;
+            cout << "Running in LOGGER Mode..." << endl;
+            cout << gPrintSeparator << std::endl;
             mLOGn = mUdpMasterListener->getTotalThreadsRun();
+            jacktrip.setLOGGER(mLOGGER); // to pass to UdpDataProtocol
             jacktrip.setLOGn(mLOGn); // to pass to UdpDataProtocol
         }
 #endif // end hubLogger

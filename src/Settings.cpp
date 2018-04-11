@@ -113,10 +113,13 @@ void Settings::parseInput(int argc, char** argv)
         // These options don't set a flag.
     { "numchannels", required_argument, NULL, 'n' }, // Number of input and output channels
 #ifdef WAIR // WAIR
-    { "wair", no_argument, NULL, 'w' }, // Run in LAIR mode, sets numnetrevchannels
+    { "wair", no_argument, NULL, 'w' }, // Run in WAIR mode, sets numnetrevchannels
     { "addcombfilterlength", required_argument, NULL, 'N' }, // added comb filter length
     { "combfilterfeedback", required_argument, NULL, 'H' }, // comb filter feedback
 #endif // endwhere
+#ifdef LOGGER // hubLogger
+    { "logger", no_argument, NULL, 'd' }, // Run LOGGER
+#endif // end hubLogger
     { "server", no_argument, NULL, 's' }, // Run in server mode
     { "client", required_argument, NULL, 'c' }, // Run in client mode, set server IP address
     { "localaddress", required_argument, NULL, 'L' }, // set local address e.g., 127.0.0.2 for second instance on same host
@@ -148,7 +151,7 @@ void Settings::parseInput(int argc, char** argv)
     /// \todo Specify mandatory arguments
     int ch;
     while ( (ch = getopt_long(argc, argv,
-                              "n:N:H:sc:SC:o:B:P:q:r:b:zlwjeJ:RT:F:DvVh", longopts, NULL)) != -1 )
+                              "n:N:H:sc:SC:o:B:P:q:r:b:zlwdjeJ:RT:F:DvVh", longopts, NULL)) != -1 )
         switch (ch) {
 
         case 'n': // Number of input and output channels
@@ -535,13 +538,6 @@ void Settings::startJackTrip()
             }
         }
 #endif // endwhere
-
-#ifdef LOGGER // hubLogger
-        if ( mLOGGER ) {
-            cout << "Running in LOGGER Mode..." << endl;
-            cout << gPrintSeparator << std::endl;
-        }
-#endif // end hubLogger
 
         // Start JackTrip
         if (gVerboseFlag) std::cout << "Settings:startJackTrip before mJackTrip->startProcess" << std::endl;
