@@ -17,6 +17,7 @@ private:
 public slots:
     void recordInterpacketInterval(int i) { record(i, true, true); }
     void recordInterpacketIntervalDouble(double d) { record(d, false, false); }
+    void recordThreshDouble(double d) { record(d, false, false); }
     void recordSecondsDouble(double d) { record(d, true, false); }
     void recordSeqNum(int i) { record(i, false, true); }
 };

@@ -81,6 +81,9 @@ UdpDataProtocol::UdpDataProtocol(JackTrip* jacktrip, const runModeT runmode,
 
 #ifdef LOGGER // hubLogger
         if(jacktrip->getLOGGER()) {
+            nPackets = 0;
+            nPacketsBelowThresh = 0;
+            nPacketsBelowThreshOverTwo = 0;
             QString tmp = gLogfileRootName+QString::number(jacktrip->getLOGn())+gLogfileExtension;
             mLogger = new HubLogger(tmp);
             mLogger->start();
@@ -89,6 +92,12 @@ UdpDataProtocol::UdpDataProtocol(JackTrip* jacktrip, const runModeT runmode,
                              mLogger, SLOT(recordInterpacketInterval(int)), Qt::QueuedConnection);
             QObject::connect(this, SIGNAL(interpacketIntervalDouble(double)),
                              mLogger, SLOT(recordInterpacketIntervalDouble(double)), Qt::QueuedConnection);
+            QObject::connect(this, SIGNAL(halfThresh(double)),
+                             mLogger, SLOT(recordThreshDouble(double)), Qt::QueuedConnection);
+            QObject::connect(this, SIGNAL(fullThresh(double)),
+                             mLogger, SLOT(recordThreshDouble(double)), Qt::QueuedConnection);
+            QObject::connect(this, SIGNAL(runningAvg(double)),
+                             mLogger, SLOT(recordThreshDouble(double)), Qt::QueuedConnection);
             QObject::connect(this, SIGNAL(secondsDouble(double)),
                              mLogger, SLOT(recordSecondsDouble(double)), Qt::QueuedConnection);
             QObject::connect(this, SIGNAL(seqNum(int)),
@@ -97,7 +106,6 @@ UdpDataProtocol::UdpDataProtocol(JackTrip* jacktrip, const runModeT runmode,
 #endif // end hubLogger
     }
 }
-
 
 //*******************************************************************************
 UdpDataProtocol::~UdpDataProtocol()
@@ -588,21 +596,46 @@ void UdpDataProtocol::receivePacketRedundancy(QUdpSocket& UdpSocket,
     if(mJackTrip->getLOGGER()) {
 #define TOSSERS 100
         // toss the first 100 to stabilize
-        if(newer_seq_num == TOSSERS) { nanoTimer.start(); }
+        if(newer_seq_num == TOSSERS) { nanoTimer.start(); tickTimer.start(); }
         if(newer_seq_num > TOSSERS) {
+            nPackets++;
             //        emit interpacketIntervalDouble(nanoTimer.elapsedNanos()*0.000001);
             double elapsed = nanoTimer.elapsedNanos()*0.000001;
             double period = (double)mJackTrip->getBufferSizeInSamples() / (double)mJackTrip->getSampleRate();
             double thresh = 1000.0 * period * mJackTrip->getBufferQueueLength();
+            double threshOverTwo = thresh/2.0;
+            if (elapsed < thresh) nPacketsBelowThresh++;
+            if (elapsed < threshOverTwo) nPacketsBelowThreshOverTwo++;
             if (elapsed > thresh) {
+//                if ((elapsed > thresh) || (elapsed < threshOverTwo)) {
                 double now = newer_seq_num * period;
                 //            qDebug() << now << elapsed << thresh;
                 emit secondsDouble(now);
+                emit halfThresh(threshOverTwo);
+                emit fullThresh(thresh);
                 emit interpacketIntervalDouble(elapsed);
                 //            emit seqNum(newer_seq_num);
                 //            emit seqNum( newer_seq_num - last_seq_num );
             }
             nanoTimer.start();
+
+            double tickElapsed = tickTimer.elapsedNanos()*0.000001;
+            double tickTime = 1000.0;
+            if (tickElapsed > tickTime) {
+                double now = newer_seq_num * period;
+//                qDebug() << now << tickElapsed << nPackets << nPacketsBelowThresh << nPacketsBelowThreshOverTwo;
+                emit secondsDouble(now);
+                emit halfThresh(thresh/2.0);
+                emit fullThresh(thresh);
+                emit fullThresh(thresh); // dummy
+                emit runningAvg(thresh * (double)nPackets / (double)nPacketsBelowThresh );
+//                emit runningAvg((thresh/2.0) * (double)nPackets / (double)nPacketsBelowThreshOverTwo );
+                tickTimer.start();
+                nPackets = 0;
+                nPacketsBelowThresh = 0;
+                nPacketsBelowThreshOverTwo = 0;
+            }
+
         }
     }
 

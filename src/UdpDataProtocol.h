@@ -157,6 +157,9 @@ signals:
 #ifdef LOGGER // hubLogger
     void interpacketInterval(int ipi_msec);
     void interpacketIntervalDouble(double ipi_nsec);
+    void halfThresh(double v);
+    void fullThresh(double v);
+    void runningAvg(double v);
     void secondsDouble(double secs);
     void seqNum(int seq_num);
 #endif // end hubLogger
@@ -218,6 +221,10 @@ private:
     HubLogger* mLogger;
     QElapsedTimer sessionTimer;
     QNanoTimer nanoTimer;
+    QNanoTimer tickTimer;
+    int nPackets;
+    int nPacketsBelowThresh;
+    int nPacketsBelowThreshOverTwo;
 #endif // end hubLogger
 };
 
