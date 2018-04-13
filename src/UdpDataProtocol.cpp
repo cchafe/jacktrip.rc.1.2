@@ -620,7 +620,7 @@ void UdpDataProtocol::receivePacketRedundancy(QUdpSocket& UdpSocket,
             nanoTimer.start();
 
             double tickElapsed = tickTimer.elapsedNanos()*0.000001;
-            double tickTime = 1000.0;
+            double tickTime = 5000.0;
             if (tickElapsed > tickTime) {
                 double now = newer_seq_num * period;
 //                qDebug() << now << tickElapsed << nPackets << nPacketsBelowThresh << nPacketsBelowThreshOverTwo;
