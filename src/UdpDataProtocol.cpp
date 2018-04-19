@@ -604,8 +604,8 @@ void UdpDataProtocol::receivePacketRedundancy(QUdpSocket& UdpSocket,
             double period = (double)mJackTrip->getBufferSizeInSamples() / (double)mJackTrip->getSampleRate();
             double thresh = 1000.0 * period * mJackTrip->getBufferQueueLength();
             double threshOverTwo = thresh/2.0;
-            qDebug() << "---------" << period << "       " << thresh;
-std::cout << "---------" << mJackTrip->getBufferQueueLength() << period << "       " << thresh << std::endl;
+//            qDebug() << "---------" << period << "       " << thresh;
+//std::cout << "---------" << mJackTrip->getBufferQueueLength() << period << "       " << thresh << std::endl;
 if (elapsed < thresh) nPacketsBelowThresh++;
             if (elapsed < threshOverTwo) nPacketsBelowThreshOverTwo++;
             if (elapsed > thresh) {
