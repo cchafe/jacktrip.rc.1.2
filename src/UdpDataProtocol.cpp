@@ -356,7 +356,7 @@ void UdpDataProtocol::run()
     //                 mJackTrip, SLOT(slotStopProcesses()),
     //                 Qt::QueuedConnection);
 
-    // Creat and bind sockets
+    // Create and bind sockets
     QUdpSocket UdpSocket;
     try {
         if (gVerboseFlag) std::cout << "    UdpDataProtocol:run" << mRunMode << " before bindSocket(UdpSocket)" << std::endl;
@@ -417,6 +417,7 @@ void UdpDataProtocol::run()
         if (gVerboseFlag) std::cout << "    UdpDataProtocol:run" << mRunMode << " before !UdpSocket.hasPendingDatagrams()" << std::endl;
         std::cout << "Waiting for Peer..." << std::endl;
         // This blocks waiting for the first packet
+        qDebug() << "TEST UdpSocket.state = " << UdpSocket.state();
         while ( !UdpSocket.hasPendingDatagrams() ) {
             if (mStopped) { return; }
             QThread::msleep(100);
