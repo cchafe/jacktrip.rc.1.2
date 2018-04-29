@@ -231,7 +231,6 @@ void UdpDataProtocol::bindSocket(QUdpSocket& UdpSocket) throw(std::runtime_error
     // we connect the receiver and issue a SHUT_WR.
     if (mRunMode == SENDER) {
         // We use the sender as an unconnected UDP socket
-        qDebug() << "SENDER TEST1 UdpSocket.state = " << UdpSocket.state();
         UdpSocket.setSocketDescriptor(sock_fd, QUdpSocket::BoundState,
                                       QUdpSocket::WriteOnly);
     }
@@ -483,8 +482,8 @@ void UdpDataProtocol::run()
                                     last_seq_num,
                                     newer_seq_num);
         }
-        int tmp = sessionTimer.elapsed();
 #ifdef LOGGER // hubLogger
+        int tmp = sessionTimer.elapsed();
         if(mJackTrip->getLOGGER()) { qDebug() << "session lasted" << (tmp/1000.0) - 2.0 << "secs"; }
         // set to 2 secs in jackTrip.h slotUdpWaitingTooLongClientGoneProbably(int wait_msec)
 #endif // end hubLogger
@@ -492,7 +491,6 @@ void UdpDataProtocol::run()
 
     case SENDER : {
         //-----------------------------------------------------------------------------------
-        qDebug() << "SENDER TEST2 UdpSocket.state = " << UdpSocket.state();
         while ( !mStopped )
         {
             // OLD CODE WITHOUT REDUNDANCY -----------------------------------------------------

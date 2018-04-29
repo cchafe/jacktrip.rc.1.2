@@ -390,7 +390,9 @@ int UdpMasterListener::isNewAddress(uint32_t address, uint16_t port)
     }
     if (!busyAddress) {
         mTotalRunningThreads++;
+#ifdef LOGGER // hubLogger
         mTotalThreadsRun++;
+#endif // end hubLogger
     }
     return ((busyAddress) ? -1 : id);
 }
