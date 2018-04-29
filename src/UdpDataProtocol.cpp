@@ -423,10 +423,7 @@ void UdpDataProtocol::run()
             if (mStopped) { return; }
             QThread::msleep(100);
             if (gVerboseFlag) std::cout << "100ms  " << std::flush;
-            qDebug() << "xxx UdpSocket.hasPendingDatagrams = " << UdpSocket.hasPendingDatagrams();
-            qDebug() << "yyy UdpSocket.pendingDatagramSize = " << UdpSocket.pendingDatagramSize();
             QNetworkDatagram dummy = UdpSocket.receiveDatagram(); // throwaway dgrams when priming the socket
-            qDebug() << "zzz UdpSocket.hasPendingDatagrams = " << UdpSocket.hasPendingDatagrams();
         }
         int first_packet_size = UdpSocket.pendingDatagramSize();
         // The following line is the same as
