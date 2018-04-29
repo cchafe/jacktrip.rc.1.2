@@ -53,6 +53,7 @@
 #if defined (__LINUX__) || (__MAC__OSX__)
 #include <sys/socket.h> // for POSIX Sockets
 #endif
+#include <QNetworkDatagram>
 
 using std::cout; using std::endl;
 
@@ -230,6 +231,7 @@ void UdpDataProtocol::bindSocket(QUdpSocket& UdpSocket) throw(std::runtime_error
     // we connect the receiver and issue a SHUT_WR.
     if (mRunMode == SENDER) {
         // We use the sender as an unconnected UDP socket
+        qDebug() << "SENDER TEST1 UdpSocket.state = " << UdpSocket.state();
         UdpSocket.setSocketDescriptor(sock_fd, QUdpSocket::BoundState,
                                       QUdpSocket::WriteOnly);
     }
@@ -417,11 +419,14 @@ void UdpDataProtocol::run()
         if (gVerboseFlag) std::cout << "    UdpDataProtocol:run" << mRunMode << " before !UdpSocket.hasPendingDatagrams()" << std::endl;
         std::cout << "Waiting for Peer..." << std::endl;
         // This blocks waiting for the first packet
-        qDebug() << "TEST UdpSocket.state = " << UdpSocket.state();
-        while ( !UdpSocket.hasPendingDatagrams() ) {
+        while ( !(UdpSocket.pendingDatagramSize()>0) ) {
             if (mStopped) { return; }
             QThread::msleep(100);
             if (gVerboseFlag) std::cout << "100ms  " << std::flush;
+            qDebug() << "xxx UdpSocket.hasPendingDatagrams = " << UdpSocket.hasPendingDatagrams();
+            qDebug() << "yyy UdpSocket.pendingDatagramSize = " << UdpSocket.pendingDatagramSize();
+            QNetworkDatagram dummy = UdpSocket.receiveDatagram(); // throwaway dgrams when priming the socket
+            qDebug() << "zzz UdpSocket.hasPendingDatagrams = " << UdpSocket.hasPendingDatagrams();
         }
         int first_packet_size = UdpSocket.pendingDatagramSize();
         // The following line is the same as
@@ -490,6 +495,7 @@ void UdpDataProtocol::run()
 
     case SENDER : {
         //-----------------------------------------------------------------------------------
+        qDebug() << "SENDER TEST2 UdpSocket.state = " << UdpSocket.state();
         while ( !mStopped )
         {
             // OLD CODE WITHOUT REDUNDANCY -----------------------------------------------------
