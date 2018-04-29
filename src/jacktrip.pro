@@ -17,8 +17,6 @@ QT += network
 
 # rc.1.2 switch enables experimental wair build
 # DEFINES += WAIR
-# rc.1.2 hubLogger branch, switch enables experimental logger build
-DEFINES += LOGGER
 
 # http://wiki.qtcentre.org/index.php?title=Undocumented_qmake#Custom_tools
 #cc DEFINES += __RT_AUDIO__
@@ -31,6 +29,8 @@ nojack {
 INCLUDEPATH += ../faust-src-lair/stk
 
 !win32 {
+  # rc.1.2 hubLogger branch, switch enables experimental logger build
+  DEFINES += LOGGER
   INCLUDEPATH+=/usr/local/include
 # wair needs stk, can be had from linux this way
 # INCLUDEPATH+=/usr/include/stk
