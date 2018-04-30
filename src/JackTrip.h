@@ -465,7 +465,7 @@ private:
     int mNumNetRevChans; ///< Number of Network Audio Channels (net comb filters)
 #endif // endwhere
 #ifdef LOGGER // hubLogger
-    int mLOGGER;
+    bool mLOGGER;
     int mLOGn;
 #endif // end hubLogger
     int mBufferQueueLength; ///< Audio Buffer from network queue length
