@@ -15,6 +15,8 @@ CONFIG(debug, debug|release) {
 QT -= gui
 QT += network
 
+unix:DISTRIBUTION = $$system(cat /etc/issue | cut -d\' \' -f1)
+
 # rc.1.2 switch enables experimental wair build
 # DEFINES += WAIR
 
@@ -55,6 +57,18 @@ macx {
 linux-g++ | linux-g++-64 {
 #   LIBS += -lasound -lrtaudio
   QMAKE_CXXFLAGS += -D__LINUX_ALSA__ #-D__LINUX_OSS__ #RtAudio Flags
+
+# workaround for Qt bug under ubuntu 18.04
+#  gcc version 7.3.0 (Ubuntu 7.3.0-16ubuntu3)
+# QMake version 3.1
+# Using Qt version 5.9.5 in /usr/lib/x86_64-linux-gnu
+
+eval(DISTRIBUTION = Ubuntu) {
+    message(building on $$DISTRIBUTION)
+INCLUDEPATH += /usr/include/x86_64-linux-gnu/c++/7
+  DEFINES += __UBUNTU__
+}
+
   QMAKE_CXXFLAGS += -g -O2
   DEFINES += __LINUX__
   }
